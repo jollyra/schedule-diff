@@ -33,7 +33,7 @@ def invert_schedule(schedule):
     return inverted_schedule
 
 
-def range_union(a, b):
+def range_intersect(a, b):
     a0, a1 = a
     b0, b1 = b
     if a == b:
@@ -61,22 +61,22 @@ def range_union(a, b):
         #     b0----b1
         return b
     else:
-        print('error: cannot union ranges', a, b)
+        print('error: cannot intersect ranges', a, b)
 
 
-def schedule_union(A, B):
+def schedule_intersect(A, B):
     C = []
     for a in A:
         for b in B:
-            union = range_union(a, b)
-            if union:
-                C.append(union)
+            intersect = range_intersect(a, b)
+            if intersect:
+                C.append(intersect)
     return C
 
 
 def schedule_subtract(A, B):
     inverse_B = invert_schedule(B)
-    return schedule_union(A, inverse_B)
+    return schedule_intersect(A, inverse_B)
 
 
 if __name__ == '__main__':
@@ -90,19 +90,19 @@ if __name__ == '__main__':
     assert is_time_within((2, 4), 3) is True
     assert is_time_within((2, 4), 5) is False
     print('is_time_within: pass')
-    assert range_union((0, 2), (0, 2)) == (0, 2)
-    assert range_union((0, 2), (0, 3)) == (0, 2)
-    assert range_union((2, 4), (0, 3)) == (2, 3)
-    assert range_union((2, 4), (3, 5)) == (3, 4)
-    assert range_union((0, 2), (0, 1)) == (0, 1)
-    assert range_union((0, 2), (1, 2)) == (1, 2)
-    assert range_union((2, 4), (1, 5)) == (2, 4)
-    assert range_union((0, 3), (1, 2)) == (1, 2)
-    assert range_union((0, 2), (2, 4)) is None
-    assert range_union((0, 2), (3, 4)) is None
-    assert range_union((2, 4), (0, 1)) is None
-    assert range_union((2, 4), (0, 2)) is None
-    print('range_union: pass')
+    assert range_intersect((0, 2), (0, 2)) == (0, 2)
+    assert range_intersect((0, 2), (0, 3)) == (0, 2)
+    assert range_intersect((2, 4), (0, 3)) == (2, 3)
+    assert range_intersect((2, 4), (3, 5)) == (3, 4)
+    assert range_intersect((0, 2), (0, 1)) == (0, 1)
+    assert range_intersect((0, 2), (1, 2)) == (1, 2)
+    assert range_intersect((2, 4), (1, 5)) == (2, 4)
+    assert range_intersect((0, 3), (1, 2)) == (1, 2)
+    assert range_intersect((0, 2), (2, 4)) is None
+    assert range_intersect((0, 2), (3, 4)) is None
+    assert range_intersect((2, 4), (0, 1)) is None
+    assert range_intersect((2, 4), (0, 2)) is None
+    print('range_intersect: pass')
     assert schedule_subtract([(0, 2)], [(3, 5)]) == [(0, 2)]
     assert schedule_subtract([(0, 2)], [(0, 2)]) == []
     assert schedule_subtract([(2, 4)], [(0, 3)]) == [(3, 4)]
